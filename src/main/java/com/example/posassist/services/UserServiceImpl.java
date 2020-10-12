@@ -116,8 +116,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public User updateUser(UpdateUserDTO updateUserDTO) throws ResourceNotFoundException{
-		Optional<User> optional = userRepository.findById(updateUserDTO.getId());
+	public User updateUser(Long id, UpdateUserDTO updateUserDTO) throws ResourceNotFoundException{
+		Optional<User> optional = userRepository.findById(id);
 		if(!optional.isPresent())
 			throw new ResourceNotFoundException("Invalid user");
 		User user = optional.get();

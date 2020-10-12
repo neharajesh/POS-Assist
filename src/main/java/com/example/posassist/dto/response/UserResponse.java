@@ -1,4 +1,3 @@
-/*
 package com.example.posassist.dto.response;
 
 import com.example.posassist.entities.Role;
@@ -25,4 +24,3 @@ public class UserResponse {
                 .build();
     }
 }
-*/

@@ -10,9 +10,6 @@ import java.util.Set;
 @Data
 public class UpdateUserDTO {
 
-    @NotNull
-    private Long id;
-
     @NotBlank
     @Size(min = 3, max = 50, message = "Name must be atleast 3 to 50 characters long")
     private String name;

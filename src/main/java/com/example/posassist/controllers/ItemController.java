@@ -5,6 +5,7 @@ import com.example.posassist.services.interfaces.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,37 +25,39 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @GetMapping("/get")
+    @GetMapping
     public @ResponseBody
     ResponseEntity<?> getAll() {
         return new ResponseEntity<>(itemService.getAllItems(), HttpStatus.OK);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public @ResponseBody
     ResponseEntity<?> getById(@PathVariable Long id) {
         return new ResponseEntity<>(itemService.findItemById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/get/{name}")
+    @GetMapping("/{name}")
     public @ResponseBody
     ResponseEntity<?> getByName(@PathVariable String name) {
         return new ResponseEntity<>(itemService.findByItemName(name), HttpStatus.OK);
     }
 
-    @GetMapping("/get/{availability}")
+    @GetMapping("/{availability}")
     public @ResponseBody
     ResponseEntity<?> getByAvailability(@PathVariable Boolean availability) {
         return new ResponseEntity<>(itemService.findByAvailability(availability), HttpStatus.OK);
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public @ResponseBody
     ResponseEntity<?> createItem(@RequestBody ItemDTO itemDTO) {
         return new ResponseEntity<>(itemService.saveNewItem(itemDTO), HttpStatus.OK);
     }
 
     @PostMapping("/updateItem/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public @ResponseBody
     ResponseEntity<?> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
         return new ResponseEntity<>(itemService.updateItem(id, itemDTO), HttpStatus.OK);
@@ -62,6 +65,7 @@ public class ItemController {
 
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public @ResponseBody
     ResponseEntity<?> deleteItem(@PathVariable Long id) {
         itemService.deleteItem(id);

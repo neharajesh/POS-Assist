@@ -5,6 +5,7 @@ import com.example.posassist.services.interfaces.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,12 +25,13 @@ public class OrderItemController {
     @Autowired
     private OrderItemService orderItemService;
 
-    @GetMapping("/get")
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public @ResponseBody ResponseEntity<?> getAll() {
         return new ResponseEntity<>(orderItemService.findAllOrderItems(), HttpStatus.OK);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public @ResponseBody ResponseEntity<?> getById(@PathVariable Long id) {
         return new ResponseEntity<>(orderItemService.findOrderItemsById(id), HttpStatus.OK);
     }
@@ -44,7 +46,7 @@ public class OrderItemController {
         return new ResponseEntity<>(orderItemService.updateOrderItems(id, orderItemDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public @ResponseBody ResponseEntity<?> delete(@PathVariable Long id) {
         orderItemService.deleteOrderItems(id);
         return new ResponseEntity<>(HttpStatus.OK);
