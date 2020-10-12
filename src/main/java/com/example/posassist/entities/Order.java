@@ -29,8 +29,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderType orderType;
 
-    @ManyToMany
-    private Set<OrderItems> orderItems = new HashSet<OrderItems>();
+    @OneToMany
+    private Set<OrderItem> orderItems = new HashSet<OrderItem>();
 
     private Date dateOfOrder;
 

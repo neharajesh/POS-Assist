@@ -1,11 +1,11 @@
 package com.example.posassist.dto.request;
 
-import com.example.posassist.entities.Items;
+import com.example.posassist.entities.Item;
 import lombok.Data;
 
 @Data
-public class OrderItemsDTO {
-    private Items items;
+public class OrderItemDTO {
+    private Item item;
 
     private String instructions;
 
