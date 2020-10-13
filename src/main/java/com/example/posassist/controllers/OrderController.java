@@ -46,8 +46,8 @@ public class OrderController {
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public @ResponseBody ResponseEntity<?> deleteOrder(@PathVariable Long id) {
+    public @ResponseBody ResponseEntity<String> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("The order has been deleted successfully!", HttpStatus.OK);
     }
 }

@@ -7,6 +7,7 @@ import com.example.posassist.dto.request.SignUpDTO;
 import com.example.posassist.exceptions.BadRequestException;
 import com.example.posassist.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -28,14 +29,14 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createUser(@Valid @RequestBody SignUpDTO signUpRequest) throws BadRequestException {
         userService.saveUser(signUpRequest);
-        return ResponseEntity.ok().body("User created successfully! \nId is" );
+        return ResponseEntity.ok().body("User created successfully!" );
     }
 
     @DeleteMapping("{userId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+    public @ResponseBody ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
-        return ResponseEntity.ok().body("User deleted successfuly");
+        return new ResponseEntity<>("The user has been deleted successfully!", HttpStatus.OK);
     }
 
     @GetMapping("{userId}")

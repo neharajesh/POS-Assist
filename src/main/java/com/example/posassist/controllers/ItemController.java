@@ -69,6 +69,6 @@ public class ItemController {
     public @ResponseBody
     ResponseEntity<?> deleteItem(@PathVariable Long id) {
         itemService.deleteItem(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("The item has been deleted successfully!", HttpStatus.OK);
     }
 }
