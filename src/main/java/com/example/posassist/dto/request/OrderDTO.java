@@ -1,6 +1,7 @@
 package com.example.posassist.dto.request;
 
 import com.example.posassist.entities.OrderItem;
+import com.example.posassist.enums.OrderStatus;
 import com.example.posassist.enums.OrderType;
 import lombok.Data;
 import java.util.Date;
@@ -20,4 +21,6 @@ public class OrderDTO {
     private OrderType orderType;
 
     private Set<OrderItem> orderItems = new HashSet<OrderItem>();
+
+    private OrderStatus orderStatus;
 }

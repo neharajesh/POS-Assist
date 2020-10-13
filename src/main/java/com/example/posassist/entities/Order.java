@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.example.posassist.enums.OrderStatus;
 import com.example.posassist.enums.OrderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,5 +36,8 @@ public class Order {
     private Date dateOfOrder;
 
     private Double total;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 }
 
