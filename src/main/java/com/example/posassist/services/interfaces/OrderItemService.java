@@ -12,7 +12,5 @@ public interface OrderItemService {
 
     OrderItem findOrderItemsById(Long id);
 
-    OrderItem updateOrderItems(Long id, OrderItemDTO orderItemDTO);
-
     void deleteOrderItems(Long id);
 }

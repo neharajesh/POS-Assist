@@ -35,6 +35,9 @@ public class OrderServiceImpl implements OrderService {
     private ItemService itemService;
 
     @Autowired
+    private OrderItemService orderItemService;
+
+    @Autowired
     private OrderItemRepository orderItemRepository;
 
 
@@ -62,47 +65,29 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order saveOrder(OrderDTO orderDTO) {
-        User orderedBy = userService.findUserByName(orderDTO.getOrderName());
         List<Double> costList = new ArrayList<>();
         Set<OrderItem> orderItemsList = new HashSet<>();
 
         orderDTO.getOrderItems().forEach(orderItemDTO -> {
-            Item items = itemService.findItemById(orderItemDTO.getItem());
-            costList.add(Double.valueOf(items.getPrice()) * orderItemDTO.getQuantity());
-            orderItemsList.add(OrderItem.builder()
-                    .instructions(orderItemDTO.getInstructions())
-                    .item(items)
-                    .quantity(orderItemDTO.getQuantity())
-                    .build());
+            Item items = itemService.findItemById(orderItemDTO.getItemId());
+            costList.add(items.getPrice() * orderItemDTO.getQuantity());
+            orderItemsList.add(orderItemService.addItemToOrder(orderItemDTO));
         });
 
         Set<OrderItem> orderItemsSet = orderItemsList.stream().map(
                 orderItem -> orderItemRepository.save(orderItem)
         ).collect(Collectors.toSet());
 
-        Double cost = costList.stream().reduce(Double.valueOf(0), (e1, e2) -> e1 + e2);
+        Double cost = costList.stream().reduce((double) 0, Double::sum);
 
         Order order = Order.builder()
-                .customerName(orderedBy.getName())
+                .customerName("Neha") //change later
                 .orderItems(orderItemsSet)
                 .dateOfOrder(new Date())
                 .total(cost)
                 .orderStatus(OrderStatus.PLACED)
+                .orderType(OrderType.valueOf(orderDTO.getOrderType()))
                 .build();
-
-        String orderType = orderDTO.getOrderType();
-        switch(orderType) {
-            case "DELIVERY":
-                order.setOrderType(OrderType.DELIVERY);
-                break;
-
-            case "TAKE_AWAY" :
-                order.setOrderType(OrderType.TAKE_AWAY);
-                break;
-
-            default:
-                order.setOrderType(OrderType.DINE_IN);
-        }
 
         return orderRepository.save(order);
     }

@@ -7,7 +7,6 @@ import java.util.Set;
 
 @Data
 public class OrderDTO {
-    private String orderName;
 
     private Set<OrderItemDTO> orderItems = new HashSet<OrderItemDTO>();
 

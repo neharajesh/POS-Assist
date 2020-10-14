@@ -41,10 +41,6 @@ public class OrderItemController {
         return new ResponseEntity<>(orderItemService.addItemToOrder(orderItemDTO), HttpStatus.OK);
     }
 
-    @PostMapping("/update/{id}")
-    public @ResponseBody ResponseEntity<?> updateOrderItem(@PathVariable Long id, @RequestBody OrderItemDTO orderItemDTO) {
-        return new ResponseEntity<>(orderItemService.updateOrderItems(id, orderItemDTO), HttpStatus.OK);
-    }
 
     @DeleteMapping("/{id}")
     public @ResponseBody ResponseEntity<?> delete(@PathVariable Long id) {

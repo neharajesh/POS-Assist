@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional
 	public User findUserById(Long id) throws ResourceNotFoundException {
 		Optional<User> user = userRepository.findById(id);
 		if(!user.isPresent()) {
@@ -41,7 +40,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional
 	public User findUserByName(String name) throws ResourceNotFoundException {
 		Optional<User> user = userRepository.findByName(name);
 		if(!user.isPresent())
@@ -50,7 +48,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional
 	public List<User> findAllUsers() {
 		return userRepository.findAll();
 	}
@@ -110,8 +107,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void deleteUser(Long userId) {
-
-		userRepository.deleteById(userId);
+		userRepository.delete(findUserById(userId));
 	}
 
 	@Override

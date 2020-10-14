@@ -25,7 +25,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public OrderItem addItemToOrder(OrderItemDTO orderItemDTO) {
 
-        Item itemInCart = itemService.findItemById(orderItemDTO.getItem());
+        Item itemInCart = itemService.findItemById(orderItemDTO.getItemId());
 
         OrderItem orderItem = OrderItem.builder()
                 .item(itemInCart)
@@ -42,15 +42,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         if(!orderItems.isPresent())
             throw new ResourceNotFoundException("Item not found in order");
         return orderItems.get();
-    }
-
-    @Override
-    public OrderItem updateOrderItems(Long id, OrderItemDTO orderItemDTO) {
-        OrderItem orderItem = findOrderItemsById(id);
-        orderItem.setInstructions(orderItem.getInstructions());
-        orderItem.setQuantity(orderItem.getQuantity());
-        orderItem.setItem(orderItem.getItem());
-        return orderItemRepository.save(orderItem);
     }
 
     @Override
