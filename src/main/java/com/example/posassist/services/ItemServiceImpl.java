@@ -31,11 +31,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> findByAvailability(Boolean availability) {
-        return itemRepository.findByAvailability(availability);
-    }
-
-    @Override
     public Item findByItemName(String itemName) {
         Optional<Item> item= itemRepository.findByItemName(itemName);
         if(!item.isPresent())
@@ -50,7 +45,6 @@ public class ItemServiceImpl implements ItemService {
                 .itemName(itemDTO.getItemName())
                 .itemType(itemDTO.getItemType())
                 .price(itemDTO.getPrice())
-                .availability(itemDTO.getAvailability())
                 .build();
         return itemRepository.save(item);
     }
@@ -62,7 +56,6 @@ public class ItemServiceImpl implements ItemService {
         item.setItemName(itemDTO.getItemName());
         item.setItemType(itemDTO.getItemType());
         item.setPrice(itemDTO.getPrice());
-        item.setAvailability(itemDTO.getAvailability());
         return itemRepository.save(item);
     }
 

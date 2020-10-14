@@ -12,9 +12,7 @@ public interface OrderService {
 
     Order findOrderByDate(Date date);
 
-    Order saveOrder(OrderDTO orderDTO, String customerName);
-
-    Order updateOrder(Long id, OrderDTO orderDTO);
+    Order saveOrder(OrderDTO orderDTO);
 
     void deleteOrder(Long id);
 }

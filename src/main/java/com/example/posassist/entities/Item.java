@@ -26,5 +26,4 @@ public class Item {
 
     private Double price;
 
-    private Boolean availability;
 }

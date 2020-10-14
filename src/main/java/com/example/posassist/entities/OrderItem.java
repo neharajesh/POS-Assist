@@ -14,7 +14,7 @@ import lombok.Data;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "orderitem")
+@Table(name = "orderitems")
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +25,7 @@ public class OrderItem {
 
     private String instructions;
 
-    @NotBlank
     private Integer quantity;
-
-    @ManyToOne
-    private Order order;
 
 
 }

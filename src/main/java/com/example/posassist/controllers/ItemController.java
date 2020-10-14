@@ -43,12 +43,6 @@ public class ItemController {
         return new ResponseEntity<>(itemService.findByItemName(name), HttpStatus.OK);
     }
 
-    @GetMapping("/{availability}")
-    public @ResponseBody
-    ResponseEntity<?> getByAvailability(@PathVariable Boolean availability) {
-        return new ResponseEntity<>(itemService.findByAvailability(availability), HttpStatus.OK);
-    }
-
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public @ResponseBody

@@ -61,13 +61,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order saveOrder(OrderDTO orderDTO, String customerName) {
-        User orderedBy = userService.findUserByName(customerName);
+    public Order saveOrder(OrderDTO orderDTO) {
+        User orderedBy = userService.findUserByName(orderDTO.getOrderName());
         List<Double> costList = new ArrayList<>();
         Set<OrderItem> orderItemsList = new HashSet<>();
 
         orderDTO.getOrderItems().forEach(orderItemDTO -> {
-            Item items = orderItemDTO.getItem();
+            Item items = itemService.findItemById(orderItemDTO.getItem());
             costList.add(Double.valueOf(items.getPrice()) * orderItemDTO.getQuantity());
             orderItemsList.add(OrderItem.builder()
                     .instructions(orderItemDTO.getInstructions())
@@ -79,33 +79,34 @@ public class OrderServiceImpl implements OrderService {
         Set<OrderItem> orderItemsSet = orderItemsList.stream().map(
                 orderItem -> orderItemRepository.save(orderItem)
         ).collect(Collectors.toSet());
+
         Double cost = costList.stream().reduce(Double.valueOf(0), (e1, e2) -> e1 + e2);
 
-        OrderType orderType = orderDTO.getOrderType();
-
         Order order = Order.builder()
-                .orderName(orderedBy.getName())
-                .orderDetails("OrderDetails")
+                .customerName(orderedBy.getName())
                 .orderItems(orderItemsSet)
                 .dateOfOrder(new Date())
-                .total(cost)	//change value
-                .orderType(orderType)
+                .total(cost)
                 .orderStatus(OrderStatus.PLACED)
                 .build();
 
+        String orderType = orderDTO.getOrderType();
+        switch(orderType) {
+            case "DELIVERY":
+                order.setOrderType(OrderType.DELIVERY);
+                break;
+
+            case "TAKE_AWAY" :
+                order.setOrderType(OrderType.TAKE_AWAY);
+                break;
+
+            default:
+                order.setOrderType(OrderType.DINE_IN);
+        }
+
         return orderRepository.save(order);
     }
 
-    @Override
-    @Transactional
-    public Order updateOrder(Long id, OrderDTO orderDTO) {
-        Order order = findOrderById(id);
-        order.setOrderName(orderDTO.getOrderName());
-        order.setOrderType(orderDTO.getOrderType());
-        order.setTotal(orderDTO.getTotal());
-        order.setOrderDetails(orderDTO.getOrderDetails());
-        return orderRepository.save(order);
-    }
 
     @Override
     public void deleteOrder(Long id) {

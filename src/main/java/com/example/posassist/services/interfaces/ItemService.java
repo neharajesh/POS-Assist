@@ -11,8 +11,6 @@ public interface ItemService {
 
     Item findItemById(Long id);
 
-    List<Item> findByAvailability(Boolean availability);
-
     Item findByItemName(String itemName);
 
     @Transactional

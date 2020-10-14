@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.posassist.dto.request.OrderItemDTO;
+import com.example.posassist.entities.Item;
 import com.example.posassist.entities.OrderItem;
 import com.example.posassist.exceptions.ResourceNotFoundException;
 import com.example.posassist.repositories.OrderItemRepository;
+import com.example.posassist.services.interfaces.ItemService;
 import com.example.posassist.services.interfaces.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,12 +19,18 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+    @Autowired
+    private ItemService itemService;
+
     @Override
     public OrderItem addItemToOrder(OrderItemDTO orderItemDTO) {
+
+        Item itemInCart = itemService.findItemById(orderItemDTO.getItem());
+
         OrderItem orderItem = OrderItem.builder()
+                .item(itemInCart)
                 .quantity(orderItemDTO.getQuantity())
                 .instructions(orderItemDTO.getInstructions())
-                .item(orderItemDTO.getItem())
                 .build();
 
         return orderItemRepository.save(orderItem);

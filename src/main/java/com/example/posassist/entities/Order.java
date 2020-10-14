@@ -23,9 +23,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String orderName;
-
-    private String orderDetails;
+    private String customerName;
 
     @Enumerated(EnumType.STRING)
     private OrderType orderType;
