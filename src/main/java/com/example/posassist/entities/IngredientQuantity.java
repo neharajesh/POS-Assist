@@ -12,18 +12,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "inventory")
-public class Inventory {
+@Table(name = "ingredientquantity")
+public class IngredientQuantity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     private Ingredient ingredient;
 
-    private Double cost;
-
-    private Double quantityBought;
-
-
+    private Double quantity;
 }

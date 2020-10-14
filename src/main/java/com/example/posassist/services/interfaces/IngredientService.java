@@ -3,18 +3,17 @@ package com.example.posassist.services.interfaces;
 import com.example.posassist.dto.request.IngredientDTO;
 import com.example.posassist.entities.Ingredient;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface IngredientService {
-    List<Ingredient> findAllIngredients();
+    List<Ingredient> allInventoryItems();
 
-    Ingredient findIngredientById(Long id);
+    Ingredient getIngredientById(Long id);
 
-    Ingredient findIngredientByName(String ingredientName);
+    @Transactional
+    Ingredient createIngredient(IngredientDTO ingredientDTO);
 
-    Ingredient addNewIngredient(IngredientDTO ingredientDTO);
-
-    Ingredient updateQuantity(IngredientDTO ingredientDTO);
-
+    @Transactional
     void deleteIngredient(Long id);
 }

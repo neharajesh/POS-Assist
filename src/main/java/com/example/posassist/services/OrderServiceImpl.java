@@ -65,8 +65,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order saveOrder(OrderDTO orderDTO) {
+
         List<Double> costList = new ArrayList<>();
         Set<OrderItem> orderItemsList = new HashSet<>();
+
 
         orderDTO.getOrderItems().forEach(orderItemDTO -> {
             Item items = itemService.findItemById(orderItemDTO.getItemId());

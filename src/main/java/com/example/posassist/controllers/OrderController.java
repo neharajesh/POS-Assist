@@ -29,7 +29,7 @@ public class OrderController {
         return new ResponseEntity<>(orderService.findOrderById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/{date}")
+    @GetMapping("/date/{date}")
     public @ResponseBody ResponseEntity<?> getByDate(@PathVariable Date date) {
         return new ResponseEntity<>(orderService.findOrderByDate(date), HttpStatus.OK);
     }

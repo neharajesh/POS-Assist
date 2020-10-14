@@ -1,9 +1,9 @@
 package com.example.posassist.repositories;
 
-import com.example.posassist.entities.Inventory;
+import com.example.posassist.entities.Recipe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface InventoryRepository extends JpaRepository<Inventory, Long> {
+public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 }

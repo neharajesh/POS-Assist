@@ -6,23 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "ingredient")
-public class Ingredient {
+@Table(name = "recipe")
+public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String ingredientName;
+    private String recipeName;
 
-    private Double cost;
-
-    private Double quantity;
-
-
+    @OneToMany
+    private Set<IngredientQuantity> ingredientQuantities = new HashSet<>();
 }

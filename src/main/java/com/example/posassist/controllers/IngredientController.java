@@ -1,9 +1,6 @@
 package com.example.posassist.controllers;
 
 import com.example.posassist.dto.request.IngredientDTO;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.posassist.services.interfaces.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,45 +14,30 @@ public class IngredientController {
     public static final String BASE_URL = "/api/v1/ingredient";
 
     @Autowired
-    private IngredientService ingredientService;
+    private IngredientService inventoryService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public @ResponseBody
     ResponseEntity<?> getAll() {
-        return new ResponseEntity<>(ingredientService.findAllIngredients(), HttpStatus.OK);
+        return new ResponseEntity<>(inventoryService.allInventoryItems(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public @ResponseBody
     ResponseEntity<?> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(ingredientService.findIngredientById(id), HttpStatus.OK);
-    }
-
-    @GetMapping("/{name}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
-    public @ResponseBody
-    ResponseEntity<?> getByName(@PathVariable String name) {
-        return new ResponseEntity<>(ingredientService.findIngredientByName(name), HttpStatus.OK);
+        return new ResponseEntity<>(inventoryService.getIngredientById(id), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
-    public @ResponseBody ResponseEntity<?> addIngredient(@RequestBody IngredientDTO ingredientDTO) {
-        return new ResponseEntity<>(ingredientService.addNewIngredient(ingredientDTO), HttpStatus.OK);
-    }
-
-    @PostMapping("/update/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public @ResponseBody ResponseEntity<?> updateIngredient(@PathVariable Long id, @RequestBody IngredientDTO ingredientDTO) {
-        return new ResponseEntity<>(ingredientService.updateQuantity(ingredientDTO), HttpStatus.OK);
+    public @ResponseBody
+    ResponseEntity<?> addInventory(@RequestBody IngredientDTO ingredientDTO) {
+        return new ResponseEntity<>(inventoryService.createIngredient(ingredientDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
-    public @ResponseBody ResponseEntity<?> deleteIngredient(@PathVariable Long id) {
-        ingredientService.deleteIngredient(id);
-        return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
+    public @ResponseBody
+    ResponseEntity<?> deleteInventory (@PathVariable Long id) {
+        inventoryService.deleteIngredient(id);
+        return new ResponseEntity<>("Deleted successfully!", HttpStatus.OK);
     }
 }
