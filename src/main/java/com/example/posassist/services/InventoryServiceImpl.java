@@ -1,17 +1,16 @@
 package com.example.posassist.services;
 
 import com.example.posassist.dto.request.InventoryDTO;
-import com.example.posassist.entities.Inventory;
+
+import com.example.posassist.entities.*;
 import com.example.posassist.exceptions.ResourceNotFoundException;
 import com.example.posassist.repositories.InventoryRepository;
-import com.example.posassist.services.interfaces.IngredientService;
-import com.example.posassist.services.interfaces.InventoryService;
+import com.example.posassist.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class InventoryServiceImpl implements InventoryService {
@@ -19,7 +18,7 @@ public class InventoryServiceImpl implements InventoryService {
     private InventoryRepository inventoryRepository;
 
     @Autowired
-    private IngredientService ingredientService;
+    private OrderService orderService;
 
     @Override
     public List<Inventory> allInventoryItems() {
@@ -46,11 +45,21 @@ public class InventoryServiceImpl implements InventoryService {
         return inventoryRepository.save(inventory);
     }
 
-    //TODO : update inventory after raw materials are consumed.
 
     @Override
     @Transactional
     public void deleteInventoryItem(Long id) {
         inventoryRepository.delete(getInventoryItemById(id));
+    }
+
+    @Override
+    @Transactional
+    public void updateInventory(Order order) {
+        Map<Long, Double> ingredientQuantitiesNeeded = orderService.orderIngredientQuantities(order);
+        ingredientQuantitiesNeeded.forEach((key, value) -> {
+            Inventory inventory = getInventoryItemById(key);
+            inventory.setQuantity(inventory.getQuantity() - value);
+            inventoryRepository.save(inventory);
+        });
     }
 }

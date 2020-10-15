@@ -25,8 +25,10 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item findItemById(Long id) {
         Optional<Item> item = itemRepository.findById(id);
-        if(!item.isPresent())
+        if(!item.isPresent()) {
+            System.out.println("item now found inside item service");
             throw new ResourceNotFoundException("This item is not on the menu tonight!");
+        }
         return item.get();
     }
 

@@ -9,5 +9,7 @@ import java.util.Set;
 public class RecipeDTO {
     private String recipeName;
 
+    private Long itemId;
+
     private Set<IngredientDTO> ingredientQuantity = new HashSet<>();
 }

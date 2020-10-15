@@ -5,11 +5,15 @@ import com.example.posassist.services.interfaces.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @CrossOrigin(origins="*", maxAge=3600)
 @RestController
 @RequestMapping(InventoryController.BASE_URL)
+@PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
 public class InventoryController {
     public static final String BASE_URL = "/api/v1/inventory";
 
@@ -30,7 +34,7 @@ public class InventoryController {
 
     @PostMapping("/create")
     public @ResponseBody
-    ResponseEntity<?> addInventory(@RequestBody InventoryDTO inventoryDTO) {
+    ResponseEntity<?> addInventory(@Valid @RequestBody InventoryDTO inventoryDTO) {
         return new ResponseEntity<>(inventoryService.createInventoryItem(inventoryDTO), HttpStatus.OK);
     }
 
@@ -40,4 +44,5 @@ public class InventoryController {
         inventoryService.deleteInventoryItem(id);
         return new ResponseEntity<>("Deleted successfully!", HttpStatus.OK);
     }
+
 }

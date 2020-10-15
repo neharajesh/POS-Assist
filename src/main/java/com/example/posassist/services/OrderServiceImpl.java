@@ -4,21 +4,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
+
+import com.example.posassist.entities.*;
 import com.example.posassist.security.services.UserPrinciple;
 import com.example.posassist.dto.request.OrderDTO;
-import com.example.posassist.entities.Item;
-import com.example.posassist.entities.Order;
-import com.example.posassist.entities.OrderItem;
-import com.example.posassist.entities.User;
 import com.example.posassist.enums.OrderStatus;
 import com.example.posassist.enums.OrderType;
 import com.example.posassist.exceptions.ResourceNotFoundException;
 import com.example.posassist.repositories.OrderItemRepository;
 import com.example.posassist.repositories.OrderRepository;
-import com.example.posassist.services.interfaces.ItemService;
-import com.example.posassist.services.interfaces.OrderItemService;
-import com.example.posassist.services.interfaces.OrderService;
-import com.example.posassist.services.interfaces.UserService;
+import com.example.posassist.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-    private UserService userService;
+    private RecipeService recipeService;
 
     @Autowired
     private ItemService itemService;
@@ -41,6 +36,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private InventoryService inventoryService;
 
 
     @Override
@@ -86,7 +84,6 @@ public class OrderServiceImpl implements OrderService {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserPrinciple user = (UserPrinciple) auth.getPrincipal();
-        System.out.println("Customer name is " + user.getName());
 
         Order order = Order.builder()
                 .customerName(user.getName())
@@ -97,6 +94,8 @@ public class OrderServiceImpl implements OrderService {
                 .orderType(OrderType.valueOf(orderDTO.getOrderType()))
                 .build();
 
+        inventoryService.updateInventory(order);
+
         return orderRepository.save(order);
     }
 
@@ -105,5 +104,26 @@ public class OrderServiceImpl implements OrderService {
     public void deleteOrder(Long id) {
         orderRepository.delete(findOrderById(id));
     }
+
+    @Override
+    public Map<Long, Double> orderIngredientQuantities(Order order) {
+        Map<Long, Double> fromRecipe = new HashMap<>();
+        Set<OrderItem> orderItemSet = order.getOrderItems();
+
+        for (OrderItem orderItem: orderItemSet) {
+            Long itemId = orderItem.getItem().getId();
+            Double quantityOrdered = orderItem.getQuantity();
+            Set<Ingredient> ingredientList = recipeService.findByItem(itemId).getIngredientQuantities();
+            for(Ingredient ingredient : ingredientList) {
+                if(fromRecipe.containsKey(ingredient.getInventory().getId())){
+                    fromRecipe.put(ingredient.getInventory().getId(), fromRecipe.get(ingredient.getInventory().getId()) + ingredient.getQuantity() * quantityOrdered);
+                }
+                else
+                    fromRecipe.put(ingredient.getInventory().getId(), ingredient.getQuantity() * quantityOrdered);
+            }
+        }
+        return fromRecipe;
+    }
+
 
 }

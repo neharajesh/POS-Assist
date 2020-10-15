@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 
 import com.example.posassist.enums.OrderStatus;
 import com.example.posassist.enums.OrderType;
@@ -33,6 +34,7 @@ public class Order {
 
     private Date dateOfOrder;
 
+    @Positive
     private Double total;
 
     @Enumerated(EnumType.STRING)

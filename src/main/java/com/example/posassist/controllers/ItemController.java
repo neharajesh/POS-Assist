@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @CrossOrigin(origins="*", maxAge=3600)
 @RestController
 @RequestMapping(ItemController.BASE_URL)
@@ -46,14 +48,14 @@ public class ItemController {
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public @ResponseBody
-    ResponseEntity<?> createItem(@RequestBody ItemDTO itemDTO) {
+    ResponseEntity<?> createItem(@Valid @RequestBody ItemDTO itemDTO) {
         return new ResponseEntity<>(itemService.saveNewItem(itemDTO), HttpStatus.OK);
     }
 
     @PostMapping("/updateItem/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public @ResponseBody
-    ResponseEntity<?> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO) {
+    ResponseEntity<?> updateItem(@PathVariable Long id, @Valid @RequestBody ItemDTO itemDTO) {
         return new ResponseEntity<>(itemService.updateItem(id, itemDTO), HttpStatus.OK);
     }
 

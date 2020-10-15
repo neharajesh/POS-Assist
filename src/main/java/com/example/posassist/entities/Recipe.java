@@ -22,6 +22,9 @@ public class Recipe {
 
     private String recipeName;
 
+    @OneToOne
+    private Item item;
+
     @OneToMany
     private Set<Ingredient> ingredientQuantities = new HashSet<>();
 }

@@ -12,5 +12,5 @@ public class OrderItemDTO {
 
     private String instructions;
 
-    private Integer quantity = 1;
+    private Double quantity = 1.0;
 }

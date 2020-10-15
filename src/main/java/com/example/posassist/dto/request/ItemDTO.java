@@ -10,10 +10,8 @@ public class ItemDTO {
     @NotBlank
     private String itemName;
 
-    @NotBlank
     private ItemType itemType;
 
-    @NotBlank
     private Double price;
 
     private Boolean availability;

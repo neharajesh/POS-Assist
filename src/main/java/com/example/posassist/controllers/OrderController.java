@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @CrossOrigin(origins="*", maxAge=3600)
 @RestController
 @RequestMapping(OrderController.BASE_URL)
@@ -35,7 +37,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public @ResponseBody ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO) {
+    public @ResponseBody ResponseEntity<?> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
         return new ResponseEntity<>(orderService.saveOrder(orderDTO), HttpStatus.OK);
     }
 

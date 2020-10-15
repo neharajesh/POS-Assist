@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Data
 @AllArgsConstructor
@@ -19,10 +21,12 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String itemName;
 
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
 
+    @Positive
     private Double price;
 }
