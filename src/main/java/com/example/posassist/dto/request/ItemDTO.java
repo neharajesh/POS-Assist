@@ -16,5 +16,5 @@ public class ItemDTO {
     @NotBlank
     private Double price;
 
-
+    private Boolean availability;
 }

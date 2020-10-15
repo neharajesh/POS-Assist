@@ -23,5 +23,5 @@ public class Recipe {
     private String recipeName;
 
     @OneToMany
-    private Set<IngredientQuantity> ingredientQuantities = new HashSet<>();
+    private Set<Ingredient> ingredientQuantities = new HashSet<>();
 }

@@ -1,11 +1,11 @@
 package com.example.posassist.services;
 
 import com.example.posassist.dto.request.RecipeDTO;
-import com.example.posassist.entities.IngredientQuantity;
+import com.example.posassist.entities.Ingredient;
 import com.example.posassist.entities.Recipe;
 import com.example.posassist.exceptions.ResourceNotFoundException;
 import com.example.posassist.repositories.RecipeRepository;
-import com.example.posassist.services.interfaces.IngredientQuantityService;
+import com.example.posassist.services.interfaces.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class RecipeServiceImpl implements com.example.posassist.services.interfa
     private RecipeRepository recipeRepository;
 
     @Autowired
-    private IngredientQuantityService ingredientQuantityService;
+    private IngredientService ingredientService;
 
     @Override
     public List<Recipe> allRecipes() {
@@ -40,13 +40,13 @@ public class RecipeServiceImpl implements com.example.posassist.services.interfa
     @Transactional
     public Recipe addNewRecipe(RecipeDTO recipeDTO) {
 
-        Set<IngredientQuantity> ingredientQuantitySet = new HashSet<>();
+        Set<Ingredient> ingredientSet = new HashSet<>();
         recipeDTO.getIngredientQuantity().forEach(ingredientQuantityDTO ->
-                ingredientQuantitySet.add(ingredientQuantityService.addNewIngredient(ingredientQuantityDTO)));
+                ingredientSet.add(ingredientService.addNewIngredient(ingredientQuantityDTO)));
 
         Recipe recipe = Recipe.builder()
                 .recipeName(recipeDTO.getRecipeName())
-                .ingredientQuantities(ingredientQuantitySet)
+                .ingredientQuantities(ingredientSet)
                 .build();
 
         return recipeRepository.save(recipe);

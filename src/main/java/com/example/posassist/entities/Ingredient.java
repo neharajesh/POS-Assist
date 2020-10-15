@@ -18,11 +18,8 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String ingredientName;
-
-    private Double cost;
+    @ManyToOne
+    private Inventory inventory;
 
     private Double quantity;
-
-
 }

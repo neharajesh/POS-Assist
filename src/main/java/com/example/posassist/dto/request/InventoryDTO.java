@@ -3,8 +3,10 @@ package com.example.posassist.dto.request;
 import lombok.Data;
 
 @Data
-public class IngredientQuantityDTO {
-    private Long ingredientId;
+public class InventoryDTO {
+    private String ingredientName;
+
+    private Double cost;
 
     private Double quantity;
 }

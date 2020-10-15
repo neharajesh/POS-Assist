@@ -9,5 +9,5 @@ import java.util.Set;
 public class RecipeDTO {
     private String recipeName;
 
-    private Set<IngredientQuantityDTO> ingredientQuantity = new HashSet<>();
+    private Set<IngredientDTO> ingredientQuantity = new HashSet<>();
 }
