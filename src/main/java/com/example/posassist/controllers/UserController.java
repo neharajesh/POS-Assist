@@ -27,7 +27,7 @@ public class UserController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> createUser(@Valid @RequestBody SignUpDTO signUpRequest) throws BadRequestException {
+    public ResponseEntity<?> createUser(@Valid @RequestBody SignUpDTO signUpRequest) throws BadRequestException {
         userService.saveUser(signUpRequest);
         return ResponseEntity.ok().body("User created successfully!" );
     }

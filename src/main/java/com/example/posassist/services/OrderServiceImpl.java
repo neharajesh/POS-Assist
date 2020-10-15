@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
-
+import com.example.posassist.security.services.UserPrinciple;
 import com.example.posassist.dto.request.OrderDTO;
 import com.example.posassist.entities.Item;
 import com.example.posassist.entities.Order;
@@ -20,6 +20,8 @@ import com.example.posassist.services.interfaces.OrderItemService;
 import com.example.posassist.services.interfaces.OrderService;
 import com.example.posassist.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -82,8 +84,12 @@ public class OrderServiceImpl implements OrderService {
 
         Double cost = costList.stream().reduce((double) 0, Double::sum);
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserPrinciple user = (UserPrinciple) auth.getPrincipal();
+        System.out.println("Customer name is " + user.getName());
+
         Order order = Order.builder()
-                .customerName("Neha") //change later
+                .customerName(user.getName())
                 .orderItems(orderItemsSet)
                 .dateOfOrder(new Date())
                 .total(cost)
