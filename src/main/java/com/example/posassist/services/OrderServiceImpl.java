@@ -4,8 +4,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
-
 import com.example.posassist.entities.*;
+import com.example.posassist.exceptions.BadRequestException;
 import com.example.posassist.security.services.UserPrinciple;
 import com.example.posassist.dto.request.OrderDTO;
 import com.example.posassist.enums.OrderStatus;
@@ -94,6 +94,14 @@ public class OrderServiceImpl implements OrderService {
                 .orderType(OrderType.valueOf(orderDTO.getOrderType()))
                 .build();
 
+        Map<Long, Double> ingredientQuantity = orderIngredientQuantities(order);
+        for(Map.Entry ingredient : ingredientQuantity.entrySet()){
+            Long inventoryId = (Long) ingredient.getKey();
+            Double quantity = inventoryService.getInventoryItemById(inventoryId).getQuantity();
+            if(quantity < (Double) ingredient.getValue())
+                throw new BadRequestException("Not enough ingredients");
+        }
+
         inventoryService.updateInventory(order);
 
         return orderRepository.save(order);
@@ -111,6 +119,7 @@ public class OrderServiceImpl implements OrderService {
         Set<OrderItem> orderItemSet = order.getOrderItems();
 
         for (OrderItem orderItem: orderItemSet) {
+
             Long itemId = orderItem.getItem().getId();
             Double quantityOrdered = orderItem.getQuantity();
             Set<Ingredient> ingredientList = recipeService.findByItem(itemId).getIngredientQuantities();
@@ -122,6 +131,7 @@ public class OrderServiceImpl implements OrderService {
                     fromRecipe.put(ingredient.getInventory().getId(), ingredient.getQuantity() * quantityOrdered);
             }
         }
+
         return fromRecipe;
     }
 
